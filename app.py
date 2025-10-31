@@ -12,8 +12,9 @@ import matplotlib.pyplot as plt
 # ================================
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Define class names (adjust if needed)
-classes = ["Meningioma", "Glioma", "No Tumor", "Pituitary"]
+# Define class names in the SAME order used during training
+# Note: Mismatched order will swap labels (e.g., Glioma vs Meningioma)
+classes = ["Glioma", "Meningioma", "Pituitary", "No Tumor"]
 
 # Create ResNet18 but adjust first conv to accept 1-channel input
 model = models.resnet18(weights=None)
