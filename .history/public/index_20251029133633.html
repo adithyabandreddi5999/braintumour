@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brain Tumor Detection — Demo</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 2rem; }
+      .card { max-width: 720px; margin: 0 auto; padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 12px; }
+      h1 { margin-top: 0; font-size: 1.5rem; }
+      button { padding: .6rem 1rem; border: 0; background: #111827; color: #fff; border-radius: 8px; cursor: pointer; }
+      button[disabled] { opacity: .6; cursor: not-allowed; }
+      .result { margin-top: 1rem; padding: 1rem; background: #f9fafb; border-radius: 8px; white-space: pre-wrap; }
+      .note { color: #6b7280; font-size: .9rem; }
+      footer { margin-top: 2rem; color: #6b7280; font-size: .85rem; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Brain Tumor Detection — Demo</h1>
+      <p class="note">
+        This is a lightweight web UI deployed on Vercel. For predictions, it calls an external Python backend (set via the BACKEND_URL env var) through a proxy at <code>/api/predict</code>.
+      </p>
+
+      <form id="form">
+        <label for="file">Upload MRI image:</label><br />
+        <input type="file" id="file" name="file" accept="image/*" required />
+        <div style="height: .75rem"></div>
+        <button id="submit" type="submit">Predict</button>
+      </form>
+
+      <div id="out" class="result" hidden></div>
+
+      <p class="note">
+        Tip: You'll set the BACKEND_URL in your Vercel project to point to your Python API hosted on Render/Railway/Hugging Face Spaces.
+      </p>
+    </div>
+
+    <footer>
+      Built for Vercel hosting. Backend runs where Python + PyTorch are supported.
+    </footer>
+
+    <script>
+      const form = document.getElementById('form');
+      const out = document.getElementById('out');
+      const submitBtn = document.getElementById('submit');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const file = document.getElementById('file').files[0];
+        if (!file) return;
+
+        const data = new FormData();
+        data.append('file', file);
+
+        submitBtn.disabled = true;
+        out.hidden = false;
+        out.textContent = 'Predicting…';
+
+        try {
+          const res = await fetch('/api/predict', {
+            method: 'POST',
+            body: data
+          });
+          const ct = res.headers.get('content-type') || '';
+          let text;
+          if (ct.includes('application/json')) {
+            const json = await res.json();
+            text = JSON.stringify(json, null, 2);
+          } else {
+            text = await res.text();
+          }
+          out.textContent = text;
+        } catch (err) {
+          out.textContent = 'Error: ' + (err?.message || String(err));
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>

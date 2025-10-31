@@ -1,0 +1,25 @@
+# Exclude large and local-only files from Vercel deployments
+AxialDataset/
+*.pth
+*.pt
+*.onnx
+*.ckpt
+*.h5
+*.npz
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.ipynb_checkpoints/
+.venv/
+.env
+
+# Node
+node_modules/
