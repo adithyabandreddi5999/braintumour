@@ -55,7 +55,7 @@ uploaded_file = st.file_uploader("Choose an MRI image...", type=["jpg", "jpeg", 
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file).convert("RGB")  # open as RGB
-    st.image(image, caption="Uploaded MRI Scan", use_column_width=True)
+    st.image(image, caption="Uploaded MRI Scan", use_container_width=True)
 
     # Prediction
     pred_class, probs = predict(image)
