@@ -1,9 +1,8 @@
-# App requirements for Streamlit Community Cloud
-streamlit>=1.37.0
-torch
-torchvision
-numpy>=1.24.0
-pillow>=10.0.0
-matplotlib>=3.7.0
-# If you need OpenCV for heatmap.py locally:
-# opencv-python
+streamlit>=1.35.0
+torch>=2.1.0
+torchvision>=0.16.0
+numpy>=1.26.0
+opencv-python-headless>=4.9.0
+Pillow>=10.0.0
+timm>=0.9.16
+matplotlib>=3.8.0
